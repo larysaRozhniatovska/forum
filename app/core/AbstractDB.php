@@ -1,6 +1,6 @@
 <?php
 
-namespace app\lib;
+namespace app\core;
 
 use Couchbase\QueryErrorException;
 use MongoDB\Driver\Exception\ConnectionException;
@@ -37,6 +37,7 @@ class AbstractDB
     {
         $result = $this->db->query($query);
         if(!$result){
+            var_dump($this->db->error);
             throw new QueryErrorException();
         }
         return $result;
@@ -57,7 +58,7 @@ class AbstractDB
     }
     public function __construct()
     {
-        $this->db = new \mysqli(DB_HOST, DB_USER,DB_PASSWORD,DB_NAME);
+        $this->db = new \mysqli(conf('DB_HOST'), conf('DB_USER'), conf('DB_PASS'), conf('DB_NAME'));
         if($this->db->connect_errno != 0){
              throw new ConnectionException();
         }
