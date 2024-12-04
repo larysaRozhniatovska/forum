@@ -18,24 +18,17 @@
             <button id="id-register" type="button" class="w3-left w3-btn w3-light-blue"
                     onclick="document.getElementById('formModal').style.display='block'">Register</button>
         </div>
-
     </div>
 </form>
-<?php if (!empty($messageNoUser)): ?>
-    <div class="w3-panel w3-card-4 w3-display-middle w3-red" id="messageNoUser">
-        <p><?= htmlspecialchars($messageNoUser); ?></p>
-    </div>
-<?php endif; ?>
+<div class="w3-panel w3-card-4 w3-display-middle w3-red" id="errorsLogin">
 <?php if (!empty($errorsLogin)): ?>
-    <ul class="w3-red w3-left w3-left-align" id="errorsLogin" >
-        <?php foreach ($errorsLogin as $key => $error):?>
-            <li > <?= $error; ?> </li>
-        <?php endforeach; ?>
-    </ul>
+    <p><?= htmlspecialchars($errorsLogin); ?></p>
+<?php else: ?>
+    <p></p>
 <?php endif; ?>
+</div>
 
-
-<form action="<?= \app\core\Route::url('index','addUser')?>" method="post" name="formSignOut" id="formModal"
+<form action="<?= \app\core\Route::url('user','addUser')?>" method="post" name="formSignOut" id="formModal"
       class="w3-panel  w3-center w3-modal"  >
     <div class="w3-modal-content ">
         <header class="w3-container w3-teal">
@@ -62,15 +55,15 @@
         <div class="w3-container w3-center w3-margin-bottom w3-margin-top ">
             <button class="w3-btn w3-teal w3-margin-bottom" style="min-width:50%">Add</button>
         </div>
+        <div class="w3-panel w3-card-4 w3-display-middle w3-red" id="errorsAdd">
 
-        <?php if (!empty($errorsAdd)): ?>
-            <ul class="w3-red w3-left w3-left-align" id="errorsAdd">
-                <?php foreach ($errorsAdd as $key => $error):?>
-                    <li> <?= $error; ?> </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
+        </div>
 </form>
+<?php if (!empty($errorsAdd)): ?>
+    <p><?= htmlspecialchars($errorsAdd); ?></p>
+<?php else: ?>
+    <p></p>
+<?php endif; ?>
 <?php if (!empty($errorsAdd)): ?>
 <script>
     let form = document.forms.formSignOut;
