@@ -11,6 +11,19 @@ class AbstractDB
     protected string $table;
 
     /**
+     * @param string $query
+     * @return bool|mysqli_result
+     * @throws QueryErrorException
+     */
+    private function query(string $query)
+    {
+        $result = $this->db->query($query);
+        if($this->db->errno != 0){
+            throw new QueryErrorException($this->db->error);
+        }
+        return $result;
+    }
+    /**
      * database query  fetch_all
      * @param string $query
      * @return array
@@ -18,10 +31,7 @@ class AbstractDB
      */
     public function queryAll(string $query) : array
     {
-        $result = $this->db->query($query);
-        if(!$result){
-            throw new QueryErrorException();
-        }
+        $result = $this->query($query);
         if ($result->num_rows > 0) {
             return $result->fetch_all(MYSQLI_ASSOC);
         }
@@ -35,12 +45,7 @@ class AbstractDB
      */
     public function queryBool(string $query) : bool
     {
-        $result = $this->db->query($query);
-        if(!$result){
-            var_dump($this->db->error);
-            throw new QueryErrorException();
-        }
-        return $result;
+        return  $this->query($query);
     }
     /**
      * database query  fetch_assoc
@@ -50,10 +55,7 @@ class AbstractDB
      */
     public function queryRow(string $query) : array
     {
-        $result = $this->db->query($query);
-        if(!$result){
-            throw new QueryErrorException();
-        }
+        $result = $this->query($query);
         return $result->fetch_assoc();
     }
     public function __construct()
@@ -89,26 +91,38 @@ class AbstractDB
 
     /**
      * return all fields by id
+     * @param string $table
      * @param int $id
      * @return array
      * @throws QueryErrorException
      */
-    public function getAllbyId(int $id) : array
+    public function getAllById(string $table, int $id) : array
     {
-        $query = "SELECT * FROM {$this->table} WHERE id = {$id}";
+        $query = "SELECT * FROM {$table} WHERE id = {$id}";
         return $this->queryRow($query);
     }
 
     /**
-     * delete record
+     *  delete record
+     * @param string $table
      * @param int $id
      * @return bool
-     * @throws QueryErrorException
      */
-    public function delRow(int $id) : bool
+    public function delRow( string $table, int $id) : bool
     {
-        $query = "DELETE FROM {$this->table} WHERE id= {$id}";
-        return $this->queryBool($query);
+        $query = "DELETE FROM {$table} WHERE id= ?";
+        /* создание подготавливаемого запроса */
+        $stmt = mysqli_prepare($this->db,$query);
+        /* связывание параметров с метками */
+        $stmt->bind_param("i", $id);
+        /* выполнение запроса */
+        $stmt->execute();
+        $res = true;
+        if ($stmt->errno != 0) {
+            $res = false;
+        }
+        $stmt->close();
+        return $res;
     }
 
 }

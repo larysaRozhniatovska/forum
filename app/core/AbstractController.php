@@ -20,21 +20,28 @@ abstract class AbstractController implements controllable
         $this->userModel = new User();
         $this->themeModel = new Theme();
     }
-    protected function redirectToTheme(string $login): void
+
+    /**
+     * select data & redirect to themes.php
+     * @param string $login
+     * @return void
+     * @throws \Exception
+     */
+    protected function redirectToThemes(string $login): void
     {
         $themes = $this->themeModel->allThemes();
         foreach ($themes as &$theme) {
-//            var_dump($theme['time']);
             $date = $theme['time'];
             $date = new DateTime($date,  new DateTimeZone('UTC'));
             $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
             $theme['time']=$date->format('Y-m-d H:i:s');
-//            var_dump($theme['time']);
         }
+        $error = $this->session->get('error');
         $this->view->render('themes', [
             'title' => 'Themes',
             'login' => $login,
             'themes' => $themes,
+            'error' => $error,
         ]);
     }
 }

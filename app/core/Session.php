@@ -9,7 +9,7 @@ class Session
     public function __construct()
     {
         session_start();
-        $this->read(['errorsAdd','errorsLogin', 'login', 'mode']);
+        $this->read(['errorsAdd','errorsLogin', 'login', 'theme', 'error']);
     }
 
     /**
@@ -22,7 +22,7 @@ class Session
         foreach ($keys as $key){
             if(!empty($_SESSION[$key])){
                 $this->properties[$key] = $_SESSION[$key];
-                if($key != 'login' && $key != 'mode') {
+                if($key != 'login' && $key != 'theme') {
                     unset($_SESSION[$key]);
                 }
             }
