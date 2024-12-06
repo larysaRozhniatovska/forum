@@ -12,6 +12,7 @@
     </head>
     <body>
         <?php include_once self::VIEWS_DIR . 'pages' . DIRECTORY_SEPARATOR . $page . '.php'?>
+        <?php include_once self::VIEWS_DIR . 'common' . DIRECTORY_SEPARATOR . 'footer.php'?>
     </body>
     <script src="../js/script.js" ></script>
 </html>
