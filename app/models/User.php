@@ -43,8 +43,20 @@ class User extends \app\core\AbstractDB
         if (!$this->validationAddUser($login))
             return false;
         $hash = password_hash($pass, PASSWORD_DEFAULT);
-        $query = "INSERT INTO {$this->table}(login, password) VALUES ('{$login}','{$hash}')";
-        return $this->queryBool($query);
+//        $query = "INSERT INTO {$this->table}(login, password) VALUES ('{$login}','{$hash}')";
+        $query = "INSERT INTO {$this->table}(login, password) VALUES (?,?);";
+        /* создание подготавливаемого запроса */
+        $stmt = mysqli_prepare($this->db,$query);
+        /* связывание параметров с метками */
+        $stmt->bind_param("ss", $login,$hash);
+        /* выполнение запроса */
+        $stmt->execute();
+        $res = true;
+        if ($stmt->errno != 0) {
+            $res = false;
+        }
+        $stmt->close();
+        return $res;
     }
     /**
      * user validation on login

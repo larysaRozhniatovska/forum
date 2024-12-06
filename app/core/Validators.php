@@ -70,10 +70,14 @@ class Validators
      */
     public static function validateInfoUser(array $data): bool
     {
-        if ( !self::isSizeValid($data['login'], 4, 100)){
-            return false;
+        $login = $data['login'];
+        if(!empty($login)) {
+            $login = trim($login);
+            $login = strip_tags($login);
+            $login = stripcslashes($login);
+            $login = htmlspecialchars($login);
         }
-        if ( !self::isSizeValid($data['password'], 4, 200)){
+        if ( !self::isSizeValid($login, 4, 100)){
             return false;
         }
         if (array_key_exists('email', $data)) {
@@ -81,15 +85,32 @@ class Validators
                 return false;
             }
         }
-//        if (array_key_exists('password', $data)) {
+        $password = '';
+        if (array_key_exists('password', $data)) {
+            $password = $data['password'];
+            if(!empty($password)) {
+                $password = trim($password);
+                $password = strip_tags($password);
+                $password = stripcslashes($password);
+                $password = htmlspecialchars($password);
+            }
+            if ( !self::isSizeValid($password, 4, 200)){
+                return false;
+            }
 //            $temp = self::isPasswordValid($data['password']);
 //            if (!empty($temp)){
 //                return false;
 //            }
-//        }
+        }
         if (array_key_exists('repassword', $data)) {
-            if (!self::isPassword2Valid($data['password'], $data['repassword'])){
-                var_dump($data['repassword']);
+            $repassword = $data['repassword'];
+            if(!empty($repassword)) {
+                $repassword = trim($repassword);
+                $repassword = strip_tags($repassword);
+                $repassword = stripcslashes($repassword);
+                $repassword = htmlspecialchars($repassword);
+            }
+            if (!self::isPassword2Valid($password, $repassword )){
                 return false;
             }
         }

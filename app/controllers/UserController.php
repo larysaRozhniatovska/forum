@@ -38,23 +38,9 @@ class UserController extends AbstractController
      */
     public function loginUser() : void
     {
-        $login = filter_input(INPUT_POST, 'login');
-        if(!empty($login)) {
-            $login = trim($login);
-            $login = strip_tags($login);
-            $login = stripcslashes($login);
-            $login = htmlspecialchars($login);
-        }
-        $password = filter_input(INPUT_POST, 'pass');
-        if(!empty($password)) {
-            $password = trim($password);
-            $password = strip_tags($password);
-            $password = stripcslashes($password);
-            $password = htmlspecialchars($password);
-        }
         $data = [
-            'login' => $login,
-            'password' => $password,
+            'login' => filter_input(INPUT_POST, 'login'),
+            'password' => filter_input(INPUT_POST, 'pass'),
         ];
         $strError = conf('ERROR_LOGIN');
         $error = Validators::validateInfoUser($data);
@@ -74,7 +60,7 @@ class UserController extends AbstractController
                 ]);
             } else {
                 $this->session->write('login', $data['login']);
-                $this->redirectToTheme($data['login']);
+                $this->redirectToThemes($data['login']);
             }
         }
 
@@ -88,31 +74,10 @@ class UserController extends AbstractController
      */
     public function addUser() : void
     {
-        $login = filter_input(INPUT_POST, 'reglogin');
-        if(!empty($login)) {
-            $login = trim($login);
-            $login = strip_tags($login);
-            $login = stripcslashes($login);
-            $login = htmlspecialchars($login);
-        }
-        $password = filter_input(INPUT_POST, 'regpass');
-        if(!empty($password)) {
-            $password = trim($password);
-            $password = strip_tags($password);
-            $password = stripcslashes($password);
-            $password = htmlspecialchars($password);
-        }
-        $repassword = filter_input(INPUT_POST, 'reregpass');
-        if(!empty($repassword)) {
-            $repassword = trim($repassword);
-            $repassword = strip_tags($repassword);
-            $repassword = stripcslashes($repassword);
-            $repassword = htmlspecialchars($repassword);
-        }
         $data = [
-            'login' => $login,
-            'password' => $password,
-            'repassword' => $repassword,
+            'login' => filter_input(INPUT_POST, 'reglogin'),
+            'password' => filter_input(INPUT_POST, 'regpass'),
+            'repassword' =>  filter_input(INPUT_POST, 'reregpass'),
         ];
         $strError = conf('ERROR_ADD');
         $error = Validators::validateInfoUser($data);
@@ -133,7 +98,7 @@ class UserController extends AbstractController
                 $res = $this->userModel->addUser($data['login'], $data['password']);
                 //TODO  $res error add in db
                 $this->session->write('login', $data['login']);
-                $this->redirectToTheme($data['login']);
+                $this->redirectToThemes($data['login']);
             }
         }
     }
