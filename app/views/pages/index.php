@@ -23,8 +23,6 @@
 <div class="w3-panel w3-card-4 w3-display-middle w3-red" id="errorsLogin">
 <?php if (!empty($errorsLogin)): ?>
     <p><?= htmlspecialchars($errorsLogin); ?></p>
-<?php else: ?>
-    <p></p>
 <?php endif; ?>
 </div>
 
@@ -59,15 +57,14 @@
 
         </div>
 </form>
+<div class="w3-panel w3-card-4 w3-display-middle w3-red" id="errorsLogin">
 <?php if (!empty($errorsAdd)): ?>
     <p><?= htmlspecialchars($errorsAdd); ?></p>
-<?php else: ?>
-    <p></p>
 <?php endif; ?>
+</div>
 <?php if (!empty($errorsAdd)): ?>
 <script>
     let form = document.forms.formSignOut;
-    console.log(form);
     form.style.display='block';
 </script>
 <?php endif; ?>
