@@ -1,3 +1,13 @@
+<?php if(!empty($error)) :  ?>
+    <div id="errorModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('errorModal').style.display='none'">&times;</span>
+            <p><?= $error ?></p>
+        </div>
+
+    </div>
+<?php endif;?>
 <div class="div-admin">
     <div>
         <div class="w3-container w3-padding w3-teal">

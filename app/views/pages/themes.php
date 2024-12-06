@@ -1,3 +1,13 @@
+<?php if(!empty($error)) :  ?>
+    <div id="errorModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('errorModal').style.display='none'">&times;</span>
+            <p><?= $error ?></p>
+        </div>
+
+    </div>
+<?php endif;?>
 <div class="div-admin">
     <div>
         <div class="w3-container w3-padding w3-teal">
@@ -12,30 +22,45 @@
             <button id="id-add" type="button" class="w3-left w3-btn w3-light-blue"
                     onclick="document.getElementById('formModal').style.display='block'">Add Theme</button>
         </div>
+        <p> <?php if(!empty($error)) :?>  <?=$error?> <?php endif; ?>  </p>
     </div>
     <div>
         <?php if(!empty($themes)) : ?>
         <?php foreach($themes as $theme) : ?>
+        <div class="container">
            <div class="div-row">
-               <form action="<?= \app\core\Route::url('theme','viewTheme')?>" method="post">
-                   <input type="hidden" name="idTheme" value="<?=$theme['id']?>">
-                   <button class="title"><?=$theme['title']?></button>
-               </form>
+               <div class="div-colum">
+                   <form action="<?= \app\core\Route::url('theme','viewTheme')?>" method="post">
+                       <input type="hidden" name="idTheme" value="<?=$theme['id']?>">
+                       <button class="title"><?=$theme['title']?></button>
+                   </form>
+                   <div class="div-row">
+                       <form action="<?= \app\core\Route::url('theme','editTheme')?>" method="post">
+                           <input type="hidden" name="idEditTheme" value="<?=$theme['id']?>">
+                           <button ><i class="fa fa-pencil-square-o" aria-hidden="true" style="color:rgb(255,125,0)"></i></button>
+                       </form>
+                       <form action="<?= \app\core\Route::url('theme','delTheme')?>" method="post">
+                           <input type="hidden" name="idDelTheme" value="<?=$theme['id'] ?>">
+                           <button><i class="fa fa-trash-o" aria-hidden="true" style="color:red"></i></button>
+                       </form>
+                   </div>
+               </div>
                <div class="div-description"> <?=$theme['description']?></div>
                <div class="div-colum">
                    <div class="user"> <?=$theme['login']?></div>
                    <div class="user"> <?=$theme['time']?></div>
                </div>
            </div>
+        </div>
         <?php endforeach; ?>
-
         <?php else: ?>
 
         <?php endif; ?>
     </div>
-
-
 </div>
+<!-- The Modal -->
+
+
 <form action="<?= \app\core\Route::url('theme','addTheme')?>"
       method="post" name="formAddTheme" id="formModal"
       class="w3-panel  w3-center w3-modal"  >
